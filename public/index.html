@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>stardust</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #play-button {
+            width: 100px;
+            height: 100px;
+            background-image: url('drive.png');
+            background-size: cover;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="play-button"></button>
+
+    <script>
+        const playButton = document.getElementById('play-button');
+        let recordingCount = 0;
+
+        playButton.addEventListener('click', () => {
+            playRecording(`stardust${recordingCount}.mp3`);
+        });
+
+        function playRecording(fileName) {
+            console.log(`Playing ${fileName}`);
+            const audio = new Audio(`${fileName}`);
+            audio.play();
+
+            audio.addEventListener('ended', () => {
+                console.log(`Playback of ${fileName} ended`);
+                saveRecording(fileName);
+                // No need to poll here, as it will be handled by pollNextRecording()
+            });
+        }
+
+        function saveRecording(fileName) {
+            console.log(`Saving ${fileName}`);
+            fetch(`/saveRecording?fileName=${fileName}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to save recording');
+                    }
+                    console.log(`Recording ${fileName} saved successfully.`);
+                    // Increment recordingCount after saving the recording
+                    recordingCount++;
+                    // Start polling for the next recording
+                    pollNextRecording();
+                })
+                .catch(error => {
+                    console.error('Error saving recording:', error);
+                });
+        }
+
+        function pollNextRecording() {
+            // console.log('Checking for next recording...');
+            const nextFileName = `instances/stardust${recordingCount + 1}.mp3`;
+            setTimeout(() => {
+                fetch(nextFileName)
+                    .then(response => {
+                        if (response.ok) {
+                            // console.log(`Next recording ${nextFileName} found. Playing...`);
+                            playRecording(nextFileName);
+                        } else {
+                            // console.log(`Next recording ${nextFileName} not found. Waiting...`);
+                            pollNextRecording();
+                        }
+                    })
+                    .catch(error => {
+                        // console.error('Error fetching next recording:', error);
+                        pollNextRecording();
+                    });
+            }, 500); // Poll every 0.5 seconds
+        }
+
+        // Start polling for the next recording
+        pollNextRecording();
+    </script>
+</body>
+</html>
