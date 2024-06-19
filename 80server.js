@@ -2,27 +2,22 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const https = require('https');
+const https = require('http');
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const certFilePath = '/etc/letsencrypt/live/stardust/fullchain.pem'; 
-const keyFilePath = '/etc/letsencrypt/live/stardust/privkey.pem';  
-
-const options = {
-    cert: fs.readFileSync(certFilePath),
-    key: fs.readFileSync(keyFilePath)
-  };
-  
-
 // const MAX_RECORDINGS = 5;
-const PORT = process.env.PORT || 443;
 
-https.createServer(options, app).listen(PORT, () => {
+// app.listen(3000, () => {
+//     console.log('p 3000');
+// });
+
+const PORT = process.env.PORT || 8080;
+
+https.createServer(app).listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
 
 app.get('/getRecordingCount', (req, res) => {
     res.json({ recordingCount: getLatestRecordingCount() });
