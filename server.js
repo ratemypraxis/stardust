@@ -7,8 +7,8 @@ const https = require('https');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const certFilePath = '/etc/letsencrypt/live/stardust/fullchain.pem'; 
-const keyFilePath = '/etc/letsencrypt/live/stardust/privkey.pem';  
+const certFilePath = '/etc/letsencrypt/live/musicalweb.2nd.systems/fullchain.pem'; 
+const keyFilePath = '/etc/letsencrypt/live/musicalweb.2nd.systems/privkey.pem';  
 
 const options = {
     cert: fs.readFileSync(certFilePath),
