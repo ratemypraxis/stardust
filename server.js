@@ -8,16 +8,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const MAX_RECORDINGS = 5;
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(443, () => {
+    console.log('p 443');
 });
 
-// Get the latest recording count
 app.get('/getRecordingCount', (req, res) => {
     res.json({ recordingCount: getLatestRecordingCount() });
 });
 
-// Save the recording and update the recording count
 app.get('/saveRecording', (req, res) => {
     const fileName = req.query.fileName;
     const instancesFolderPath = 'public/instances/';
@@ -26,13 +24,11 @@ app.get('/saveRecording', (req, res) => {
     res.sendStatus(200);
 });
 
-// Get the latest recording count
 function getLatestRecordingCount() {
     const files = fs.readdirSync('public/instances');
     return files.length;
 }
 
-// Get the next recording count
 function getNextRecordingCount() {
     const latestCount = getLatestRecordingCount();
     const nextCount = latestCount + 1;

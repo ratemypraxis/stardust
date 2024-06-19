@@ -25,36 +25,36 @@
         }
 
         .text { grid-area: text; }
-        .drive { grid-area: drive; }
+.drive { grid-area: drive; }
 
-        .grid-container {
-        display: grid;
-        grid-template-areas:
-            'text'
-            'drive';
-        width: 100vw;
-        }
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'text'
+    'drive';
+  width: 100vw;
+}
 
-        .grid-container > div {
-        text-align: center;
-        font-size: 20px;
-        }
+.grid-container > div {
+  text-align: center;
+  font-size: 20px;
+}
 
     </style>
 </head>
 <body>
-    <div class="grid-container">
-        <div class="text">
-        <p>tap the hard drive (once pls) if you want</p>
+<div class="grid-container">
+    <div class="text">
+    <p>tap the hard drive (once pls) if you want</p>
+        <br>
     </div>
     <div class="drive">
     <button id="play-button"></button>
 </div>
 </div>
-
     <script>
         const playButton = document.getElementById('play-button');
-        let recordingCount = 1; 
+        let recordingCount = 1;
 
         playButton.addEventListener('click', () => {
             playRecording(`instances/stardust${recordingCount}.mp3`);
@@ -65,30 +65,32 @@
             const audio = new Audio(fileName);
             audio.play();
 
-            audio.addEventListener('ended', () => {
-                console.log(`Playback of ${fileName} ended`);
+            audio.addEventListener('done', () => {
+                console.log(`${fileName} done`);
                 recordingCount++;
                 if (recordingCount <= 20) { 
                     playRecording(`instances/stardust${recordingCount}.mp3`);
                 } else {
-                    console.log('End of playlist.');
+                    console.log('done');
+                    //todo make page quit lol
                 }
             });
         }
 
+        // old donwload/reup script
         // function saveRecording(fileName) {
         //     console.log(`saving ${fileName}`);
         //     fetch(`/saveRecording?fileName=${fileName}`)
         //         .then(response => {
         //             if (!response.ok) {
-        //                 throw new Error('Failed to save recording');
+        //                 throw new Error('not saving');
         //             }
-        //             console.log(`Recording ${fileName} saved successfully.`);
+        //             console.log(`${fileName} saved`);
         //             recordingCount++;
         //             pollNextRecording();
         //         })
         //         .catch(error => {
-        //             console.error('Error saving recording:', error);
+        //             console.error('not sav:', error);
         //         });
         // }
 
@@ -99,15 +101,15 @@
         //         fetch(nextFileName)
         //             .then(response => {
         //                 if (response.ok) {
-        //                     // console.log(`${nextFileName} found and playing...`);
+        //                     // console.log(`${nextFileName} playing`);
         //                     playRecording(nextFileName);
         //                 } else {
-        //                     // console.log(`${nextFileName} not found but waiting...`);
+        //                     // console.log(`${nextFileName} seekin`);
         //                     pollNextRecording();
         //                 }
         //             })
         //             .catch(error => {
-        //                 // console.error('cant get recording:', error);
+        //                 // console.error('cant get song:', error);
         //                 pollNextRecording();
         //             });
         //     }, 500); 
@@ -115,6 +117,8 @@
 
         // pollNextRecording();
 
+
+        //spam the erorr console lol
         // function simulateErrors() {
         //     const errorMessage = "I am sitting at a computer different from the one you are at now. I recorded the sound of my speaking voice and this website is going to play it back, download it and re-upload it again and again until the resonant frequencies of the server reinforce themselves so that any semblance of my speech, with perhaps the exception of rhythm, is destroyed. What you will hear, then, are the natural resonant frequencies of the server articulated by speech. I regard this activity not so much as a demonstration of a physical fact, but more as a way to smooth out any irregularities my speech might have.";
 
